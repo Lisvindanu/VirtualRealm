@@ -1,0 +1,11 @@
+version: "3.10"
+
+services:
+  game-marketplace-mysql:
+    container_name: game-marketplace-mysql
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: marketplace
