@@ -1,0 +1,30 @@
+@startuml
+title User Authentication System Design
+
+' Define actors
+actor User
+
+' Define components
+package "API" {
+  [Authentication Service]
+  [User Registration]
+  [User Login]
+}
+
+package "Database" {
+  [User Table]
+}
+
+' Define interactions
+User -> [User Registration] : Register
+[User Registration] -> [User Table] : Create User
+[User Table] --> [User Registration] : User Created
+
+User -> [User Login] : Login
+[User Login] -> [User Table] : Verify Credentials
+[User Table] --> [User Login] : Credentials Valid
+
+' Define relationships
+[Authentication Service] --> [User Table] : Reads/Writes User Data
+
+@enduml
