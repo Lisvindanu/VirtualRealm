@@ -48,8 +48,8 @@ class AuthController(private val authServices: AuthServices,) {
         produces = ["application/json"],
         consumes = ["application/json"]
     )
-    fun logout(@RequestHeader("X-Api-Key") token: String): ResponseEntity<WebResponse<Nothing?>> {
-        authServices.logout(token)
+    fun logout(@RequestBody logoutRequest: LogoutRequest): ResponseEntity<WebResponse<Nothing?>> {
+        authServices.logout(logoutRequest.token)
         val response = WebResponse(
             code = 200,
             status = "success",
@@ -57,6 +57,7 @@ class AuthController(private val authServices: AuthServices,) {
         )
         return ResponseEntity.ok(response)
     }
+
 
 }
 
