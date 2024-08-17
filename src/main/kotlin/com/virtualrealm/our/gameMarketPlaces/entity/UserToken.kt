@@ -5,16 +5,21 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "tokens")
-data class Token(
-
+data class UserToken(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
     @Column(name = "username")
     val username: String,
-    @Column(name = "token")
+
+    @Column(unique = true)
     val token: String,
+
     @Column(name = "expires_at")
-    val expiresAt: LocalDateTime
+    val expiresAt: LocalDateTime,
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = true)
+    val user: User? = null
 )

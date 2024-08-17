@@ -5,9 +5,9 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "username": "AchrilAlvialdo",
-  "email": "AldoGeming@Gmail.com",
-  "password": "AldoGeming"
+  "username": "Lisvindanu",
+  "email": "Lisvindanu015@Gmail.com",
+  "password": "Danu"
 }
 
 ### Login
@@ -17,13 +17,19 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "username": "AchrilAlvialdo",
-  "password": "AldoGeming"
+  "username": "Lisvindanu",
+  "password": "Danu"
 }
+
 ### Logout
 POST http://localhost:8080/api/auth/logout
 X-Api-Key: Secret
 Content-Type: application/json
 Accept: application/json
+
+{
+  "token" : "adf8ba58-dee6-4607-9029-dd56d9ef4410"
+}
+
 
 
