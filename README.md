@@ -208,7 +208,6 @@ Request :
 - Method : DELETE
   - Endpoint : `/api/products/{id_product}`
   - Header :
-
     - Accept : application/json
   - Body :
 
@@ -219,3 +218,245 @@ Request :
   "status" : "string"
 }
   ```
+
+## Purchase
+  ## Create Purchase
+- Request :
+-  Method: POST
+  - Endpoint: /api/purchases
+    - Header:
+    - Content-Type: application/json
+    - Accept: application/json
+      - X-Api-Key: "Your API keys"
+  - Body :
+    ```json
+    {
+    "userId": "String",
+    "productId": "String",
+    "quantity": "integer"
+    }
+     ```
+
+    - Response:
+   ``` json
+    {
+    "code": "number",
+    "status": "string",
+    "data": {
+    "purchaseId": "String",
+    "userId": "String",
+    "productId": "String",
+    "quantity": "integer",
+    "totalPrice": "long",
+    "createdAt": "date"
+      } 
+    }
+```
+
+## Get Purchase History
+- Request : 
+  - Method : GET
+  - EndPoint : /api/purchases
+  - Header :
+  - Accept : application/json
+    - X-Api-Key: "Your API keys"
+  - Query Param :
+    - userId : "String"
+  - Response :
+  ```json
+    {
+    "code": "number",
+    "status": "string",
+      "data": [
+          {
+          "purchaseId": "String",
+          "userId": "String",
+          "productId": "String",
+          "quantity": "integer",
+          "totalPrice": "long",
+          "createdAt": "date"
+          }
+      ]
+    }
+  ```
+## Payment
+  ## Initiate Payment
+  - Method: POST
+  - Endpoint: /api/payments/initiate
+  - Header:
+    - Content-Type: application/json
+    - Accept: application/json
+    - X-Api-Key: "Your API keys"
+  - Body:
+```json
+{
+  "purchaseId": "String",
+  "amount": "long"
+}
+```
+  - Response :
+```json
+{
+  "code": "number",
+  "status": "string",
+  "data": {
+    "paymentId": "String",
+    "status": "string",
+    "amount": "long",
+    "createdAt": "date"
+  }
+}
+```
+
+  ## Confirm Payment
+  - Method: PUT
+  - Endpoint: /api/payments/confirm/{paymentId}
+  - Header:
+    - Content-Type: application/json
+    - Accept: application/json
+    - X-Api-Key: "Your API keys"
+  - Body:
+```json
+{
+      "status": "String" // Possible values: "confirmed", "failed"
+}
+```
+  - Response:
+```json
+{
+      "code": "number",
+      "status": "string",
+      "data": {
+        "paymentId": "String",
+        "status": "string",
+        "confirmedAt": "date"
+      }
+}
+```
+
+## Cancel Payment
+- Method : PUT
+- EndPoint : /api/payments/cancel/{paymentId}
+- Header :
+  - Content-Type : application/json
+  - Accept : application/json
+- Body :
+```json
+{
+  "reason": "String"
+}
+```
+- Response :
+```json
+{
+  "code": "number",
+  "status": "string"
+}
+```
+
+## Inventory
+  ## Get User Inventory
+  - Method: GET
+  - Endpoint: /api/inventory
+  - Header:
+    - Accept: application/json
+    - X-Api-Key: "Your API keys"
+- Query Parameters:
+  - userId: "String"
+  - Response:
+    ```json
+    {
+    "code" : "number",
+    "status" : "string",
+    "data" : [
+          {
+            "itemId": "String",
+            "name": "String",
+            "quantity": "integer",
+            "lastUpdated": "date"
+         }
+      ] 
+    }
+    ```
+    
+## Use Inventory Item
+- Method: POST
+- Endpoint: /api/inventory/use
+- Header:
+  - Content-Type: application/json
+  - Accept: application/json
+  - X-Api-Key: "Your API keys"
+- Body:
+```json
+{
+"userId": "String",
+"itemId": "String",
+"quantity": "integer"
+}
+```
+- Response:
+```json
+{
+"code": "number",
+"status": "string",
+"data": {
+"userId": "String",
+"itemId": "String",
+"quantityUsed": "integer",
+"remainingQuantity": "integer",
+"updatedAt": "date"
+}
+}
+```
+
+
+## Admin Dashboard
+  ### Get Sales Report
+- Method: GET
+- Endpoint: /api/admin/sales-report
+- Header:
+  - Accept: application/json
+  - X-Api-Key: "Your API keys"
+- Response:
+```json
+{
+  "code": "number",
+  "status": "string",
+  "data": {
+  "totalSales": "long",
+  "topSellingItems": [
+        {
+          "itemId": "String",
+          "name": "String",
+          "quantitySold": "integer",
+          "totalRevenue": "long"
+        }
+      ]
+    }
+  }
+```
+
+## Manage Users
+- Method: POST
+- Endpoint: /api/admin/users/manage
+- Header:
+  - Content-Type: application/json
+  - Accept: application/json
+  - X-Api-Key: "Your API keys"
+- Body:
+```json
+ {
+    "userId": "String",
+    "action": "String" // Possible values: "delete", "disable", "enable"
+    }
+```
+   
+- Response:
+```json
+  {
+    "code": "number",
+    "status": "string"
+    }
+```
+    
+  
