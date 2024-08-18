@@ -10,7 +10,7 @@ import java.util.*
 @Table(name = "products")
 data class Product(
     @Id
-    val id : String,
+    val id : Long? = null,
     @Column(name = "name")
     var name: String,
     @Column(name = "price")

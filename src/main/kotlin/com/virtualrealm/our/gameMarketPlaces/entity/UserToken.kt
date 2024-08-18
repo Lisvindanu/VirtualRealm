@@ -10,16 +10,16 @@ data class UserToken(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
-    @Column(name = "username")
+    @Column(name = "username", nullable = false)
     val username: String,
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     val token: String,
 
-    @Column(name = "expires_at")
+    @Column(name = "expires_at", nullable = false)
     val expiresAt: LocalDateTime,
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = true)
-    val user: User? = null
+    @JoinColumn(name = "user_id", nullable = false)
+    val user: User
 )
