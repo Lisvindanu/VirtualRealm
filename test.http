@@ -43,7 +43,7 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "id": 110011,
+  "id": 1,
   "name": "Lenovo Legion 5",
   "price": 300000,
   "quantity": 10
@@ -136,8 +136,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "userId": 8,
-  "productId": 110011,
+  "userId": 10,
+  "productId": 1,
   "quantity": 2
 }
 ### Get Purchase
@@ -146,4 +146,39 @@ X-Api-Key: Secret
 Accept: application/json
 
 
+### Initiate payment test
+POST http://localhost:8080/api/payments/initiate
+X-Api-Key: Secret
+Content-Type: application/json
+Accept: application/json
+
+{
+  "purchaseId": 9,
+  "amount": 1000
+}
+
+### Confirm Payment
+PUT http://localhost:8080/api/payments/confirm/3
+X-Api-Key: Secret
+Content-Type: application/json
+Accept: application/json
+
+{
+  "status": "confirmed"
+}
+
+### Cancel Payment
+PUT http://localhost:8080/api/payments/cancel/3
+X-Api-Key: Secret
+Content-Type: application/json
+Accept: application/json
+
+{
+  "reason": "Customer request"
+}
+
+### get payment details
+GET http://localhost:8080/api/payments/1
+X-Api-Key: Secret
+Accept: application/json
 
