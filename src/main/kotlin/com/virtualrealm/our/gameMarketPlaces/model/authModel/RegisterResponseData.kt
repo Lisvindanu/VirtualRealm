@@ -1,4 +1,4 @@
-package com.virtualrealm.our.gameMarketPlaces.model
+package com.virtualrealm.our.gameMarketPlaces.model.authModel
 
 import java.time.LocalDateTime
 

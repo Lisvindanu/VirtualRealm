@@ -2,10 +2,7 @@ package com.virtualrealm.our.gameMarketPlaces.service.impl
 
 import com.virtualrealm.our.gameMarketPlaces.entity.User
 import com.virtualrealm.our.gameMarketPlaces.entity.UserToken
-import com.virtualrealm.our.gameMarketPlaces.model.LoginRequest
-import com.virtualrealm.our.gameMarketPlaces.model.LoginResponseData
-import com.virtualrealm.our.gameMarketPlaces.model.RegisterRequest
-import com.virtualrealm.our.gameMarketPlaces.model.RegisterResponseData
+import com.virtualrealm.our.gameMarketPlaces.model.authModel.*
 import com.virtualrealm.our.gameMarketPlaces.repository.TokenRepository
 import com.virtualrealm.our.gameMarketPlaces.repository.UserRepository
 import com.virtualrealm.our.gameMarketPlaces.service.AuthServices
@@ -68,6 +65,13 @@ class AuthServicesImpl(
         }
     }
 
+    override fun getUserData(token: String): UserDataResponse {
+        logger.info("Fetching user data for token: $token")
+        val userToken = tokenRepository.findByToken(token) ?: throw IllegalArgumentException("Invalid Token")
+        val user = userToken.user ?: throw IllegalArgumentException("User not found")
+        return UserDataResponse(username = user.username, email = user.email)
+    }
+
 
 
     private fun convertUserToResponseData(user: User): RegisterResponseData {
@@ -78,4 +82,6 @@ class AuthServicesImpl(
             created_at = user.createdAt
         )
     }
+
+
 }

@@ -5,8 +5,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "username": "Lisvindanu",
-  "email": "Lisvindanu015@Gmail.com",
+  "username": "admin",
+  "email": "admin@Gmail.com",
   "password": "Danu"
 }
 
@@ -17,8 +17,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "username": "Lisvindanu",
-  "password": "Danu"
+  "username": "qq",
+  "password": "qq"
 }
 
 ### Logout
@@ -28,8 +28,105 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "token" : "adf8ba58-dee6-4607-9029-dd56d9ef4410"
+  "token" : "fd807c0b-0375-4ac1-baf2-9287b3dd0402"
 }
 
+### get token to frontend
+GET http://localhost:8080/api/auth/user
+X-Api-Key: Secret
+Authorization: Bearer 772aca36-910a-4c76-8a23-19fa8e52e3da
+
+###create product
+POST http://localhost:8080/api/products
+X-Api-Key: Secret
+Content-Type: application/json
+Accept: application/json
+
+{
+  "id" : "A0010",
+  "name": "Lenovo Legion 5",
+  "price": 300000,
+  "quantity": 10
+}
+
+###create product invalid
+
+POST http://localhost:8080/api/products
+X-Api-Key: Secret
+Content-Type: application/json
+Accept: application/json
+
+{
+  "id" : "",
+  "name": "",
+  "price": 0,
+  "quantity": -10
+}
+### get product
+GET localhost:8080/api/products/A0010
+X-Api-Key: Secret
+Accept: application/json
+### get product not found
+GET localhost:8080/api/products/Salah
+X-Api-Key: Secret
+Accept: application/json
+
+### Update Product
+PUT localhost:8080/api/products/A0010
+X-Api-Key: Secret
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "Lenovo Legion 6 pro",
+  "price": 100000,
+  "quantity": 10
+
+}
+### Update Product not Found
+PUT localhost:8080/api/products/Salah
+X-Api-Key: Secret
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "Lenovo Legion 6 pro",
+  "price": 100000,
+  "quantity": 10
+
+}
+### Update Product with invalid body
+PUT localhost:8080/api/products/A001
+X-Api-Key: Secret
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "",
+  "price": 0,
+  "quantity": -10
+
+}
+
+### Delete product
+
+DELETE localhost:8080/api/products/A0010
+X-Api-Key: Secret
+Accept: application/json
+
+### Delete product not found
+DELETE localhost:8080/api/products/A001
+X-Api-Key: Secret
+Accept: application/json
+
+### list products
+GET http://localhost:8080/api/products
+X-Api-Key: Secret
+### list products with size
+GET http://localhost:8080/api/products?size=5
+X-Api-Key: Secret
+### list products with size and page
+GET http://localhost:8080/api/products?size=5&page=1
+X-Api-Key: Secret
 
 

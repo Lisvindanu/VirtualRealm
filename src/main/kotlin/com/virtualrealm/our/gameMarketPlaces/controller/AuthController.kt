@@ -2,8 +2,7 @@ package com.virtualrealm.our.gameMarketPlaces.controller
 
 
 import com.virtualrealm.our.gameMarketPlaces.model.*
-import com.virtualrealm.our.gameMarketPlaces.repository.TokenRepository
-import com.virtualrealm.our.gameMarketPlaces.repository.UserRepository
+import com.virtualrealm.our.gameMarketPlaces.model.authModel.*
 import com.virtualrealm.our.gameMarketPlaces.service.AuthServices
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
@@ -57,6 +56,20 @@ class AuthController(private val authServices: AuthServices,) {
         )
         return ResponseEntity.ok(response)
     }
+    fun handleOptions() {
+        // Handle preflight request
+    }
+    @GetMapping("/user")
+    fun getUserData(@RequestHeader("Authorization") authorization: String): ResponseEntity<WebResponse<UserDataResponse>> {
+        val token = authorization.removePrefix("Bearer ").trim()
+        val userData = authServices.getUserData(token)
+        return ResponseEntity.ok(WebResponse(
+            code = 200,
+            status = "success",
+            data = userData
+        ))
+    }
+
 
 
 }
