@@ -3,7 +3,7 @@ package com.virtualrealm.our.gameMarketPlaces.model.itemManagementModel
 import java.util.*
 
 data class ProductResponse(
-    val id: String,
+    val id: Long?,
     val name: String,
     val price: Long,
     val quantity: Int,

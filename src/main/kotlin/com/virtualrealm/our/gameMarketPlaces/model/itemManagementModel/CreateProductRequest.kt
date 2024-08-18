@@ -5,8 +5,8 @@ import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 
 data class CreateProductRequest(
-    @field:NotBlank
-    val id:String?,
+    @field:NotNull
+    val id:Long?,
     @field:NotBlank
     val name:String?,
     @field:NotNull

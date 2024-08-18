@@ -7,8 +7,8 @@ import com.virtualrealm.our.gameMarketPlaces.model.itemManagementModel.UpdatePro
 
 interface ProductService {
     fun create(createProductRequest: CreateProductRequest) : ProductResponse
-    fun get(id: String) : ProductResponse
-    fun update(id: String, updateProductRequest: UpdateProductRequest) : ProductResponse
-    fun delete(id: String)
+    fun get(id: Long) : ProductResponse
+    fun update(id: Long, updateProductRequest: UpdateProductRequest) : ProductResponse
+    fun delete(id: Long)
     fun list(listProductRequest: ListProductRequest) : List<ProductResponse>
 }

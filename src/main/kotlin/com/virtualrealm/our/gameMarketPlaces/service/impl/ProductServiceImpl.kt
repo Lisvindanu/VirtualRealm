@@ -33,12 +33,12 @@ class ProductServiceImpl (
         return convertProductToProductResponse(product)
     }
 
-    override fun get(id: String): ProductResponse {
+    override fun get(id: Long): ProductResponse {
         val product = findProductByIdOrThrowNotFound(id)
         return convertProductToProductResponse(product)
     }
 
-    override fun update(id: String, updateProductRequest: UpdateProductRequest): ProductResponse {
+    override fun update(id: Long, updateProductRequest: UpdateProductRequest): ProductResponse {
         val product = findProductByIdOrThrowNotFound(id)
         validationUtil.validate(updateProductRequest)
         product.apply {
@@ -51,7 +51,7 @@ class ProductServiceImpl (
         return convertProductToProductResponse(product)
     }
 
-    override fun delete(id: String) {
+    override fun delete(id: Long) {
        val product = findProductByIdOrThrowNotFound(id)
         productRepository.delete(product)
     }
@@ -62,7 +62,7 @@ class ProductServiceImpl (
         return product.map { convertProductToProductResponse(it) }
     }
 
-    private fun findProductByIdOrThrowNotFound(id: String): Product {
+    private fun findProductByIdOrThrowNotFound(id: Long): Product {
         val product = productRepository.findByIdOrNull(id)
         if(product == null) {
             throw NotFoundException()

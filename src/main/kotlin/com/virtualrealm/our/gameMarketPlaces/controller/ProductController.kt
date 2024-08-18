@@ -30,7 +30,7 @@ class ProductController(val productService: ProductService) {
         value = ["/api/products/{id}"],
         produces = ["application/json"]
     )
-    fun getProduct(@PathVariable("id") id: String): WebResponse<ProductResponse> {
+    fun getProduct(@PathVariable("id") id: Long): WebResponse<ProductResponse> {
         val productResponse = productService.get(id)
         return WebResponse(
             code = 200,
@@ -44,7 +44,7 @@ class ProductController(val productService: ProductService) {
         produces = ["application/json"],
         consumes = ["application/json"]
     )
-    fun updateProduct(@PathVariable("id") id:String,
+    fun updateProduct(@PathVariable("id") id:Long,
                       @RequestBody updateProductRequest: UpdateProductRequest): WebResponse<ProductResponse> {
         val productResponse = productService.update(id, updateProductRequest)
         return WebResponse(
@@ -58,7 +58,7 @@ class ProductController(val productService: ProductService) {
         value = ["/api/products/{id}"],
         produces = ["application/json"]
     )
-    fun deleteProduct(@PathVariable("id") id: String): WebResponse<String> {
+    fun deleteProduct(@PathVariable("id") id: Long): WebResponse<Long> {
         productService.delete(id)
         return WebResponse(
             code = 200,

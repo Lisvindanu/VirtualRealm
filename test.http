@@ -43,7 +43,7 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "id" : "A0010",
+  "id": 110011,
   "name": "Lenovo Legion 5",
   "price": 300000,
   "quantity": 10
@@ -128,5 +128,22 @@ X-Api-Key: Secret
 ### list products with size and page
 GET http://localhost:8080/api/products?size=5&page=1
 X-Api-Key: Secret
+
+### Create Purchase
+POST http://localhost:8080/api/purchases
+X-Api-Key: Secret
+Content-Type: application/json
+Accept: application/json
+
+{
+  "userId": 8,
+  "productId": 110011,
+  "quantity": 2
+}
+### Get Purchase
+GET http://localhost:8080/api/purchases?userId=10
+X-Api-Key: Secret
+Accept: application/json
+
 
 
