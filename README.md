@@ -94,8 +94,8 @@ Request :
   - Body :
 ```json 
 {
-  "id" : "String, unique",
-  "name" : "Srting",
+  "id" : "Long, unique",
+  "name" : "String",
   "price" :"long",
   "quantity" : "integer"
 } 
@@ -128,7 +128,7 @@ Request :
   "code" : "number",
   "status" : "string",
   "data" : {
-    "id" : "String, unique",
+    "id" : "Long, unique",
     "name" : "Srting",
     "price" : "long",
     "quantity" : "integer",
@@ -147,7 +147,7 @@ Request :
   - Body :
 ```json 
 {
-  "id" : "String, unique",
+  "id" : "Long, unique",
   "name" : "Srting",
   "quantity" : "integer"
 } 
@@ -159,7 +159,7 @@ Request :
   "status" : "string",
   "data" : {
     "id" : "String, unique",
-    "name" : "Srting",
+    "name" : "String",
     "price" : "Long",
     "quantity" : "integer",
     "created at" : "date",
@@ -186,15 +186,15 @@ Request :
   "status" : "string",
   "data" : [
     {
-      "id" : "String, unique",
+      "id" : "Long, unique",
       "name" : "Srting",
       "price" : "Long",
       "quantity" : "integer",
       "created at" : "date",
       "updatedAt" : "date"
     }, {
-      "id" : "String, unique",
-      "name" : "Srting",
+      "id" : "Long, unique",
+      "name" : "String",
       "price" : "Long",
       "quantity" : "integer",
       "created at" : "date",
@@ -231,20 +231,20 @@ Request :
   - Body :
     ```json
     {
-    "userId": "String",
+    "userId": "Long",
     "productId": "String",
     "quantity": "integer"
     }
      ```
 
     - Response:
-   ``` json
+   ```json
     {
     "code": "number",
     "status": "string",
     "data": {
-    "purchaseId": "String",
-    "userId": "String",
+    "purchaseId": "Long",
+    "userId": "Long",
     "productId": "String",
     "quantity": "integer",
     "totalPrice": "long",
@@ -269,8 +269,8 @@ Request :
     "status": "string",
       "data": [
           {
-          "purchaseId": "String",
-          "userId": "String",
+          "purchaseId": "Long",
+          "userId": "Long",
           "productId": "String",
           "quantity": "integer",
           "totalPrice": "long",
@@ -290,7 +290,7 @@ Request :
   - Body:
 ```json
 {
-  "purchaseId": "String",
+  "purchaseId": "Long",
   "amount": "long"
 }
 ```
@@ -300,7 +300,7 @@ Request :
   "code": "number",
   "status": "string",
   "data": {
-    "paymentId": "String",
+    "paymentId": "Long",
     "status": "string",
     "amount": "long",
     "createdAt": "date"
@@ -327,7 +327,7 @@ Request :
       "code": "number",
       "status": "string",
       "data": {
-        "paymentId": "String",
+        "paymentId": "Long",
         "status": "string",
         "confirmedAt": "date"
       }
