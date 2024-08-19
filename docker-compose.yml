@@ -1,6 +1,18 @@
 version: "3.10"
 
 services:
+  virtual-realm-api:
+    container_name: virtual-realm-api
+    image: virtual-realm-api:0.0.1
+    ports:
+      - 8080:8080
+    environment:
+      DATABASE_USERNAME: root
+      DATABASE_PASSWORD: password
+      DATABASE_URL: jdbc:mysql://game-marketplace-mysql:3306/marketplace
+    depends_on:
+      - game-marketplace-mysql
+
   game-marketplace-mysql:
     container_name: game-marketplace-mysql
     image: mysql:latest
