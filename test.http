@@ -5,9 +5,9 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "username": "IpinTampan",
-  "email": "IpinTampan@Gmail.com",
-  "password": "Ipin123"
+  "username": "DanuKun",
+  "email": "DanuKun@Gmail.com",
+  "password": "DanuKun"
 }
 
 ### Login
