@@ -5,9 +5,9 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "username": "admin",
-  "email": "admin@Gmail.com",
-  "password": "Danu"
+  "username": "IpinTampan",
+  "email": "IpinTampan@Gmail.com",
+  "password": "Ipin123"
 }
 
 ### Login
@@ -17,8 +17,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "username": "qq",
-  "password": "qq"
+  "username": "IpinTampan",
+  "password": "Ipin123"
 }
 
 ### Logout
@@ -28,7 +28,7 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "token" : "fd807c0b-0375-4ac1-baf2-9287b3dd0402"
+  "token" : "80a361df-9338-4170-b94c-44d71852d5cd"
 }
 
 ### get token to frontend

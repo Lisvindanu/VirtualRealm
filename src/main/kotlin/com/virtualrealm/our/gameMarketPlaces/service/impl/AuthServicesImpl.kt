@@ -7,6 +7,7 @@ import com.virtualrealm.our.gameMarketPlaces.repository.TokenRepository
 import com.virtualrealm.our.gameMarketPlaces.repository.UserRepository
 import com.virtualrealm.our.gameMarketPlaces.service.AuthServices
 import com.virtualrealm.our.gameMarketPlaces.validation.ValidationUtil
+import org.mindrot.jbcrypt.BCrypt
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
@@ -20,10 +21,17 @@ class AuthServicesImpl(
 
     override fun register(registerRequest: RegisterRequest): RegisterResponseData {
         validationUtil.validate(registerRequest)
+        if(userRepository.findByEmail(registerRequest.email) != null) {
+            throw IllegalArgumentException("User email already exists")
+        }
+        if (userRepository.findByUsername(registerRequest.username) != null) {
+            throw IllegalArgumentException("User username already exists")
+        }
+        val hashedPassword = hashPassword(registerRequest.password)
         val user = User(
             username = registerRequest.username,
             email = registerRequest.email,
-            password = registerRequest.password
+            password = hashedPassword
         )
         val savedUser = userRepository.save(user)
         return convertUserToResponseData(savedUser)
@@ -31,9 +39,11 @@ class AuthServicesImpl(
 
     override fun login(loginRequest: LoginRequest): LoginResponseData {
         validationUtil.validate(loginRequest)
-        val user = userRepository.findByUsernameAndPassword(loginRequest.username, loginRequest.password)
+        val user = userRepository.findByUsername(loginRequest.username)
             ?: throw IllegalArgumentException("Invalid Credentials")
-
+        if(!checkPassword(loginRequest.password, user.password)) {
+            throw IllegalArgumentException("Invalid Credentials")
+        }
         val token = UUID.randomUUID().toString()
         val userToken = UserToken(
             username = user.username,
@@ -53,7 +63,7 @@ class AuthServicesImpl(
             logger.info("Attempting to logout with token: $token")
             val userToken = tokenRepository.findByToken(token)
             if (userToken != null) {
-                tokenRepository.delete(userToken) // Menggunakan metode delete bawaan JpaRepository
+                tokenRepository.delete(userToken)
                 logger.info("Token deleted successfully.")
             } else {
                 logger.error("Token not found: $token")
@@ -83,5 +93,11 @@ class AuthServicesImpl(
         )
     }
 
+    fun hashPassword(password: String): String {
+        return BCrypt.hashpw(password, BCrypt.gensalt())
+    }
+    fun checkPassword(plainPassword: String, hashedPassword: String): Boolean {
+        return BCrypt.checkpw(plainPassword, hashedPassword)
+    }
 
 }
