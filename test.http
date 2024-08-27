@@ -136,12 +136,12 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "userId": 10,
+  "userId": 1,
   "productId": 1,
   "quantity": 2
 }
 ### Get Purchase
-GET http://localhost:8080/api/purchases?userId=10
+GET http://localhost:8080/api/purchases?userId=1
 X-Api-Key: Secret
 Accept: application/json
 
@@ -153,12 +153,12 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "purchaseId": 9,
-  "amount": 1000
+  "purchaseId": 1,
+  "amount": 100000
 }
 
 ### Confirm Payment
-PUT http://localhost:8080/api/payments/confirm/3
+PUT http://localhost:8080/api/payments/confirm/1
 X-Api-Key: Secret
 Content-Type: application/json
 Accept: application/json
@@ -181,4 +181,10 @@ Accept: application/json
 GET http://localhost:8080/api/payments/1
 X-Api-Key: Secret
 Accept: application/json
+
+
+### Get User Inventory
+GET http://localhost:8080/api/inventory?userId=1
+Accept: application/json
+X-Api-Key: Secret
 
