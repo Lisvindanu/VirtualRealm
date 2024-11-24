@@ -1,9 +1,9 @@
 package com.virtualrealm.our.gameMarketPlaces.controller
 
-import com.virtualrealm.our.gameMarketPlaces.entity.User
 import com.virtualrealm.our.gameMarketPlaces.model.WebResponse
 import com.virtualrealm.our.gameMarketPlaces.model.authModel.*
 import com.virtualrealm.our.gameMarketPlaces.service.AuthServices
+import jakarta.servlet.http.HttpServletResponse
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @CrossOrigin
 @RequestMapping("/api/auth")
-class AuthController(private val authServices: AuthServices) {
+class AuthController(
+    private val authServices: AuthServices,
+    private val response: HttpServletResponse
+) {
 
     @PostMapping("/register")
     fun register(@RequestBody @Valid request: RegisterRequest): ResponseEntity<WebResponse<RegisterResponseData>> {
@@ -82,6 +85,10 @@ class AuthController(private val authServices: AuthServices) {
 
 
             val registerResponseData = authServices.registerOrLoginWithGoogle(userData)
+
+
+            response.sendRedirect("http://localhost:5501/dashboard.html")
+            return ResponseEntity.ok().build()
 
             val response = WebResponse(
                 code = 200,

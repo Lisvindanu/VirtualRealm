@@ -209,6 +209,7 @@ X-Api-Key: secret
 
 ###
 GET http://localhost:8080/api/auth/login/oauth2/code/auth0?code=authCodeFromAuth0
+X-Api-Key: secret
 Content-Type: application/json
 
 

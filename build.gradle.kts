@@ -34,7 +34,8 @@ dependencies {
 	implementation("io.jsonwebtoken:jjwt-jackson:0.11.5")
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
 	implementation("com.google.oauth-client:google-oauth-client:1.34.0")
-
+	implementation("io.github.cdimascio:dotenv-kotlin:6.4.0")
+	implementation("io.github.cdimascio:dotenv-java:3.0.2")
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-client:3.3.5")
 	implementation("org.springframework.security:spring-security-oauth2-jose:6.3.4")
 	implementation("org.springframework.boot:spring-boot-starter-security")
