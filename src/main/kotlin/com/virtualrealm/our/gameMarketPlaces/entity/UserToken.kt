@@ -21,5 +21,8 @@ data class UserToken(
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    val user: User
+    val user: User,
+
+    @Column(name = "sub", unique = true)
+    val sub: String? = null
 )

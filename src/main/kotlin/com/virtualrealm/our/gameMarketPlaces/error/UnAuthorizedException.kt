@@ -1,4 +1,4 @@
 package com.virtualrealm.our.gameMarketPlaces.error
 
-class UnAuthorizedException: Exception() {
+class UnAuthorizedException(s: String) : Exception() {
 }

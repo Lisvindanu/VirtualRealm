@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class ApiKeySeeder(val apiKeyRepository: ApiKeyRepository) : ApplicationRunner {
-    val apiKey = "Secret"
+    val apiKey = "secret"
     override fun run(args: ApplicationArguments?) {
         if(!apiKeyRepository.existsById(apiKey)) {
             val entity = ApiKey(id = apiKey)

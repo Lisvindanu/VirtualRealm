@@ -1,58 +1,64 @@
 ### Register User
 POST http://localhost:8080/api/auth/register
-X-Api-Key: Secret
+X-Api-Key: secret
 Content-Type: application/json
 Accept: application/json
 
 {
-  "username": "DanuKun",
-  "email": "DanuKun@Gmail.com",
-  "password": "DanuKun"
+  "username": "saw",
+  "email": "saw@Gmail.com",
+  "password": "saw",
+  "isGoogle": false
 }
 
 ### Login
 POST http://localhost:8080/api/auth/login
-X-Api-Key: Secret
+X-Api-Key: secret
 Content-Type: application/json
 Accept: application/json
 
+
 {
-  "username": "IpinTampan",
-  "password": "Ipin123"
+  "username": "saw",
+  "password": "saw",
+  "isGoogle": false
 }
+
+
+
 
 ### Logout
 POST http://localhost:8080/api/auth/logout
-X-Api-Key: Secret
+X-Api-Key: secret
 Content-Type: application/json
 Accept: application/json
+Authorization: eyJzdWIiOiI3YzExNDZiYS1iMTJjLTQzZTMtOWRkOC0zNmU1MGNlYTc0NGMiLCJ1c2VybmFtZSI6InNhdyJ9
 
-{
-  "token" : "80a361df-9338-4170-b94c-44d71852d5cd"
-}
 
 ### get token to frontend
 GET http://localhost:8080/api/auth/user
-X-Api-Key: Secret
-Authorization: Bearer 772aca36-910a-4c76-8a23-19fa8e52e3da
+Authorization: eyJzdWIiOiI3YzExNDZiYS1iMTJjLTQzZTMtOWRkOC0zNmU1MGNlYTc0NGMiLCJ1c2VybmFtZSI6InNhdyJ9
+X-Api-Key: secret
+
 
 ###create product
 POST http://localhost:8080/api/products
-X-Api-Key: Secret
+X-Api-Key: secret
 Content-Type: application/json
 Accept: application/json
+token: eyJzdWIiOiI0YTU3NzcxOS03OTZlLTQ3ODUtOWYwYi1iYWFiN2I4ZmRjYzciLCJ1c2VybmFtZSI6InMifQ==
 
 {
-  "id": 1,
-  "name": "Lenovo Legion 5",
-  "price": 300000,
+  "id": 3,
+  "name": "naruto Lagi Sakit ",
+  "price": 1200000,
   "quantity": 10
 }
 
 ###create product invalid
 
 POST http://localhost:8080/api/products
-X-Api-Key: Secret
+X-Api-Key: secret
 Content-Type: application/json
 Accept: application/json
 
@@ -63,17 +69,18 @@ Accept: application/json
   "quantity": -10
 }
 ### get product
-GET localhost:8080/api/products/A0010
-X-Api-Key: Secret
+GET localhost:8080/api/products/1
+X-Api-Key: secret
 Accept: application/json
+
 ### get product not found
 GET localhost:8080/api/products/Salah
-X-Api-Key: Secret
+X-Api-Key: secret
 Accept: application/json
 
 ### Update Product
-PUT localhost:8080/api/products/A0010
-X-Api-Key: Secret
+PUT localhost:8080/api/products/1
+X-Api-Key: secret
 Content-Type: application/json
 Accept: application/json
 
@@ -85,7 +92,7 @@ Accept: application/json
 }
 ### Update Product not Found
 PUT localhost:8080/api/products/Salah
-X-Api-Key: Secret
+X-Api-Key: secret
 Content-Type: application/json
 Accept: application/json
 
@@ -97,7 +104,7 @@ Accept: application/json
 }
 ### Update Product with invalid body
 PUT localhost:8080/api/products/A001
-X-Api-Key: Secret
+X-Api-Key: secret
 Content-Type: application/json
 Accept: application/json
 
@@ -110,28 +117,28 @@ Accept: application/json
 
 ### Delete product
 
-DELETE localhost:8080/api/products/A0010
-X-Api-Key: Secret
+DELETE localhost:8080/api/products/1
+X-Api-Key: secret
 Accept: application/json
 
 ### Delete product not found
 DELETE localhost:8080/api/products/A001
-X-Api-Key: Secret
+X-Api-Key: secret
 Accept: application/json
 
 ### list products
 GET http://localhost:8080/api/products
-X-Api-Key: Secret
+X-Api-Key: secret
 ### list products with size
 GET http://localhost:8080/api/products?size=5
-X-Api-Key: Secret
+X-Api-Key: secret
 ### list products with size and page
 GET http://localhost:8080/api/products?size=5&page=1
-X-Api-Key: Secret
+X-Api-Key: secret
 
 ### Create Purchase
 POST http://localhost:8080/api/purchases
-X-Api-Key: Secret
+X-Api-Key: secret
 Content-Type: application/json
 Accept: application/json
 
@@ -142,24 +149,24 @@ Accept: application/json
 }
 ### Get Purchase
 GET http://localhost:8080/api/purchases?userId=1
-X-Api-Key: Secret
+X-Api-Key: secret
 Accept: application/json
 
 
 ### Initiate payment test
 POST http://localhost:8080/api/payments/initiate
-X-Api-Key: Secret
+X-Api-Key: secret
 Content-Type: application/json
 Accept: application/json
 
 {
   "purchaseId": 1,
-  "amount": 100000
+  "amount": 200000
 }
 
 ### Confirm Payment
-PUT http://localhost:8080/api/payments/confirm/1
-X-Api-Key: Secret
+PUT http://localhost:8080/api/payments/confirm/6
+X-Api-Key: secret
 Content-Type: application/json
 Accept: application/json
 
@@ -168,8 +175,8 @@ Accept: application/json
 }
 
 ### Cancel Payment
-PUT http://localhost:8080/api/payments/cancel/3
-X-Api-Key: Secret
+PUT http://localhost:8080/api/payments/cancel/1
+X-Api-Key: secret
 Content-Type: application/json
 Accept: application/json
 
@@ -178,13 +185,62 @@ Accept: application/json
 }
 
 ### get payment details
-GET http://localhost:8080/api/payments/1
-X-Api-Key: Secret
+GET http://localhost:8080/api/payments/2
+X-Api-Key: secret
 Accept: application/json
 
 
 ### Get User Inventory
 GET http://localhost:8080/api/inventory?userId=1
 Accept: application/json
-X-Api-Key: Secret
+X-Api-Key: secret
 
+###
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+X-Api-Key: secret
+
+{
+  "username": "tewdstesUser",
+  "email": "tewdstes@example.com",
+  "password": "tewsdtesPassword",
+  "isAuth0": true
+}
+
+###
+GET http://localhost:8080/api/auth/login/oauth2/code/auth0?code=authCodeFromAuth0
+Content-Type: application/json
+
+
+### Login via Google OAuth2
+GET http://localhost:8080/api/auth/login/oauth2/code/google
+X-Api-Key: secret
+Accept: application/json
+
+
+
+### Register User via API
+POST http://localhost:8080/api/auth/register
+X-Api-Key: secret
+Content-Type: application/json
+Accept: application/json
+
+{
+  "username": "danu",
+  "email": "danu@Gmail.com",
+  "password": "danu",
+  "isAuth0": false
+}
+
+### Create Product via API
+POST http://localhost:8080/api/products
+X-Api-Key: secret
+Content-Type: application/json
+Accept: application/json
+
+{
+  "id": 1,
+  "name": "Ps Vita",
+  "price": 1200000,
+  "quantity": 10
+}

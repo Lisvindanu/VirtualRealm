@@ -4,11 +4,13 @@ import com.virtualrealm.our.gameMarketPlaces.error.NotFoundException
 import com.virtualrealm.our.gameMarketPlaces.error.UnAuthorizedException
 import com.virtualrealm.our.gameMarketPlaces.model.WebResponse
 import jakarta.validation.ConstraintViolationException
+import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
 
 @RestControllerAdvice
+@CrossOrigin
 class ErrorController {
     @ExceptionHandler(value = [ConstraintViolationException::class])
     fun validationHandler(constraintViolationException: ConstraintViolationException): WebResponse<String> {

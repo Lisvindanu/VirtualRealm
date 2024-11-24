@@ -9,7 +9,9 @@ import com.virtualrealm.our.gameMarketPlaces.model.itemManagementModel.UpdatePro
 import com.virtualrealm.our.gameMarketPlaces.service.ProductService
 import org.springframework.web.bind.annotation.*
 
+
 @RestController
+@CrossOrigin
 class ProductController(val productService: ProductService) {
 
     @PostMapping(
@@ -31,6 +33,9 @@ class ProductController(val productService: ProductService) {
         produces = ["application/json"]
     )
     fun getProduct(@PathVariable("id") id: Long,@RequestHeader("X-Api-Key") apiKey: String): WebResponse<ProductResponse> {
+        if(apiKey != "secret") {
+            throw IllegalArgumentException("API key invalid")
+        }
         val productResponse = productService.get(id)
         return WebResponse(
             code = 200,
