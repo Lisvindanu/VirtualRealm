@@ -9,8 +9,11 @@ class GamesStoreApplication
 
 fun main(args: Array<String>) {
 	val dotenv = Dotenv.configure().load()
-	dotenv.entries().forEach { entry ->
-		System.setProperty(entry.key, entry.value)
+	val requiredKeys = listOf("GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "GOOGLE_REDIRECT_URI")
+
+	requiredKeys.forEach { key ->
+		requireNotNull(dotenv[key]) { "Environment variable $key is required but not set in .env" }
+		System.setProperty(key, dotenv[key] ?: "")
 	}
 	runApplication<GamesStoreApplication>(*args)
 }
