@@ -21,6 +21,9 @@ data class User (
     @Column(name = "password")
     val password: String,
 
+    @Column(name = "googleId")
+    val googleId: String? = null,
+
     @Column(name = "created_at")
     val createdAt: LocalDateTime = LocalDateTime.now()
 )

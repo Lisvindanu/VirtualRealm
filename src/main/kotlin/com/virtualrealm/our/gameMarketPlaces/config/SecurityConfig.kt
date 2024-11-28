@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
+import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer
@@ -26,6 +27,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 @Configuration
 @EnableWebSecurity
+
 class SecurityConfig : WebMvcConfigurer {
 
     @Bean
@@ -57,7 +59,7 @@ class SecurityConfig : WebMvcConfigurer {
             }
             .oauth2Login { oauth ->
                 oauth.loginPage("/login") // Kalau perlu halaman login khusus
-                oauth.defaultSuccessUrl("/home", true) // Arahkan ke halaman utama setelah login berhasil
+                oauth.defaultSuccessUrl("/dashboard", true) // Arahkan ke halaman utama setelah login berhasil
                 oauth.failureUrl("/login?error=true") // Arahkan ke halaman login jika login gagal
                 oauth.successHandler { request, response, authentication ->
                     println("Successfully authenticated: ${authentication.name}")
@@ -71,6 +73,7 @@ class SecurityConfig : WebMvcConfigurer {
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized")
                 }
             }
+//            .oauth2Login (Customizer.withDefaults())
 
         return http.build()
     }

@@ -19,8 +19,8 @@ Accept: application/json
 
 
 {
-  "username": "saw",
-  "password": "saw",
+  "username": "Agung Alfatah",
+  "password": "AgungTampan123",
   "isGoogle": false
 }
 
@@ -245,3 +245,31 @@ Accept: application/json
   "price": 1200000,
   "quantity": 10
 }
+
+
+### Step 1: Initiate OAuth2 Authorization
+
+GET https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=751951873142-6lrn0jmmpm0r5cf63p294kmaqpvo1rsq.apps.googleusercontent.com&redirect_uri=http://localhost:8080/login/oauth2/code/google&scope=profile%20email&state=RANDOM_STATE_STRING
+
+
+### Exchange Authorization Code for Access Token
+POST https://oauth2.googleapis.com/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=authorization_code
+code=4%2F0AeanS0boLOowhl3Ywc0eJQu6dr443_tQK58VkgQLIZly6NG4NhjavWPQtIb9b5dGia54fw
+client_id=751951873142-6lrn0jmmpm0r5cf63p294kmaqpvo1rsq.apps.googleusercontent.com
+client_secret=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
+redirect_uri=http://localhost:8080/login/oauth2/code/google
+
+
+### Step 3: Use the Access Token to Retrieve User Info
+# Replace {access_token} with the token received from the previous request
+GET https://www.googleapis.com/oauth2/v3/userinfo
+Authorization: Bearer {access_token}
+
+### Test the /user endpoint
+GET http://localhost:8080/api/auth/user
+Authorization: eyJzdWIiOiJjZTFhOTkxOC1iYWQ2LTRjMTktOTA4NC1jNDgyNzZkOTIzMWUiLCJ1c2VybmFtZSI6IkJhbmdEemlrcmkifQ==
+X-Api-Key: secret
+
