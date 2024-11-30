@@ -101,31 +101,6 @@ class AuthServicesImpl(
     }
 
 
-//    override fun register(registerRequest: RegisterRequest): RegisterResponseData {
-//        validationUtil.validate(registerRequest)
-//
-//        if (userRepository.findByEmail(registerRequest.email) != null) {
-//            throw IllegalArgumentException("User email already exists")
-//        }
-//        if (userRepository.findByUsername(registerRequest.username) != null) {
-//            throw IllegalArgumentException("User username already exists")
-//        }
-//
-//        val password = if (registerRequest.isGoogle) {
-//            null
-//        } else {
-//            registerRequest.password ?: throw IllegalArgumentException("Password cannot be null")
-//        }
-//        val hashedPassword = password?.let { hashPassword(it) }
-//        val user = User(
-//            username = registerRequest.username,
-//            email = registerRequest.email,
-//            password = hashedPassword ?: ""
-//        )
-//        val savedUser = userRepository.save(user)
-//        return convertUserToResponseData(savedUser)
-//    }
-
     override fun login(loginRequest: LoginRequest): LoginResponseData {
         validationUtil.validate(loginRequest)
 
@@ -153,22 +128,6 @@ class AuthServicesImpl(
         }
     }
 
-//    override fun registerOrLoginWithGoogle(userData: UserDataResponse): RegisterResponseData {
-//        val existingUser = userRepository.findByUsername(userData.username)
-//        val user = if (existingUser != null) {
-//            existingUser
-//        } else {
-//            val newUser = User(
-//                username = userData.username,
-//                email = userData.email,
-//                password = "",
-//                googleId = userData.googleId
-//            )
-//            userRepository.save(newUser)
-//            newUser
-//        }
-//        return convertUserToResponseData(user)
-//    }
 
     //tess
     @Transactional
@@ -274,42 +233,6 @@ class AuthServicesImpl(
         }
     }
 
-
-//ori
-//    override fun exchangeAuthCodeForToken(code: String): String {
-//        val client = OkHttpClient()
-//        val tokenEndpoint = "https://oauth2.googleapis.com/token"
-//
-//        val formBody = FormBody.Builder()
-//            .add("code", code)
-//            .add("client_id", googleClientId)
-//            .add("client_secret", googleClientSecret)
-//            .add("redirect_uri", redirectUri)
-//            .add("grant_type", "authorization_code")
-//            .build()
-//
-//        val request = Request.Builder()
-//            .url(tokenEndpoint)
-//            .post(formBody)
-//            .build()
-//
-//        try {
-//            client.newCall(request).execute().use { response ->
-//                if (!response.isSuccessful) {
-//                    logger.error("Failed to exchange auth code for token: ${response.message}")
-//                    throw IllegalArgumentException("Invalid response: ${response.code}")
-//                }
-//                val responseBody = response.body?.string() ?: throw IllegalArgumentException("Empty response body")
-//                val tokenResponse = ObjectMapper().readTree(responseBody)
-//                return tokenResponse["access_token"].asText()
-//            }
-//        } catch (e: Exception) {
-//            logger.error("Error exchanging auth code: ${e.message}")
-//            throw RuntimeException("Error during token exchange", e)
-//        }
-//    }
-
-
     override fun exchangeAuthCodeForToken(code: String): String {
         val client = OkHttpClient()
         val tokenEndpoint = "https://oauth2.googleapis.com/token"
@@ -348,51 +271,6 @@ class AuthServicesImpl(
         }
     }
 
-
-//    override fun exchangeAuthCodeForToken(code: String): String {
-//        val client = OkHttpClient()
-//
-//        // Google's token endpoint
-//        val tokenEndpoint = "https://oauth2.googleapis.com/token"
-//
-//        // Your Google Client ID and Client Secret
-
-//        val redirectUri = "http://localhost:8080/login/oauth2/code/google"  // This should match the redirect URI you registered in Google Developer Console
-//
-//        // Create the request body
-//        val formBody = FormBody.Builder()
-//            .add("code", code)
-//            .add("client_id", clientId)
-//            .add("client_secret", clientSecret)
-//            .add("redirect_uri", redirectUri)
-//            .add("grant_type", "authorization_code")
-//            .build()
-//
-//        // Create the request
-//        val request = Request.Builder()
-//            .url(tokenEndpoint)
-//            .post(formBody)
-//            .build()
-//
-//        // Make the request
-//        val response: Response = client.newCall(request).execute()
-//
-//        if (!response.isSuccessful) {
-//            throw IllegalArgumentException("Failed to exchange auth code for token: ${response.message}")
-//        }
-//
-//        val responseBody1 = response.body?.string() ?: throw IllegalArgumentException("Empty response body")
-//        println(responseBody1)
-//        // Parse the response
-//        val responseBody = response.body?.string() ?: throw IllegalArgumentException("Empty response body")
-//        val objectMapper = ObjectMapper()
-//        val tokenResponse = objectMapper.readTree(responseBody)
-//
-//        // Extract the access token (and optionally the refresh token)
-//        val accessToken = tokenResponse["access_token"].asText()
-//
-//        return accessToken  // Return the access token
-//    }
 
     private fun convertUserToResponseData(user: User): RegisterResponseData {
         return RegisterResponseData(
