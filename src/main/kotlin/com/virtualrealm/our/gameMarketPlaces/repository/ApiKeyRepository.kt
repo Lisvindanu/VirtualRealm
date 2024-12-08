@@ -4,5 +4,6 @@ import com.virtualrealm.our.gameMarketPlaces.entity.ApiKey
 import org.springframework.data.jpa.repository.JpaRepository
 
 @EnableJpaRepositories
+@SpringBootApplication
 interface ApiKeyRepository: JpaRepository<ApiKey, String> {
 }
