@@ -8,6 +8,7 @@ class GamesStoreApplication
 
 fun main(args: Array<String>) {
 	// Check for missing keys and log a clear error message
+	//test
 	val requiredKeys = listOf(
 		"STACKHERO_MARIADB_DATABASE_URL", "STACKHERO_MARIADB_HOST", "STACKHERO_MARIADB_PORT", "STACKHERO_MARIADB_ROOT_PASSWORD",
 		"SMTP_HOST", "SMTP_PORT", "SMTP_USERNAME", "SMTP_PASSWORD",
