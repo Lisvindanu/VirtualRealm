@@ -1,3 +1,8 @@
+### Send OTP request
+POST http://localhost:8080/api/auth/send-otp?email=anaphygon@protonmail.com
+X-Api-Key: secret
+
+
 ### Register User
 POST http://localhost:8080/api/auth/register
 X-Api-Key: secret
@@ -5,24 +10,58 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "username": "saw",
-  "email": "saw@Gmail.com",
-  "password": "saw",
+  "username": "LebahGanteng",
+  "email": "LebahGanteng@protonmail.com",
+  "password": "LebahGanteng",
+  "password_confirmation": "LebahGanteng",
   "isGoogle": false
 }
 
-### Login
+### Login kondisi isOtpVerified : false
 POST http://localhost:8080/api/auth/login
 X-Api-Key: secret
 Content-Type: application/json
 Accept: application/json
 
+{
+  "email": "Anaphygon@protonmail.com",
+  "password": "Test123",
+  "isGoogle": false,
+  "isOtpVerified" : false
+
+}
+
+### verif otp
+POST http://localhost:8080/api/auth/verify-otp-login
+X-Api-Key: secret
+Content-Type: application/json
 
 {
-  "username": "Agung Alfatah",
-  "password": "AgungTampan123",
-  "isGoogle": false
+  "email": "Anaphygon@protonmail.com",
+
+  "otp": "172513"
 }
+
+### Login setelah verifotp true
+POST http://localhost:8080/api/auth/login
+X-Api-Key: secret
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "Anaphygon@protonmail.com",
+  "password": "Test123",
+  "isGoogle": false,
+  "isOtpVerified" : true
+
+}
+
+
+
+### Test the /user endpoint
+GET http://localhost:8080/api/auth/user
+X-Api-Key: secret
+Authorization: eyJzdWIiOiIzZWRjMDcxMi1jZGZkLTQ3YWEtOTZlMy0wMjYzYjVjNjA1ZTgiLCJ1c2VybmFtZSI6IkFuYXBoeWdvbiJ9
 
 
 
@@ -32,7 +71,8 @@ POST http://localhost:8080/api/auth/logout
 X-Api-Key: secret
 Content-Type: application/json
 Accept: application/json
-Authorization: eyJzdWIiOiI3YzExNDZiYS1iMTJjLTQzZTMtOWRkOC0zNmU1MGNlYTc0NGMiLCJ1c2VybmFtZSI6InNhdyJ9
+Authorization: Bearer eyJzdWIiOiJlYWVkNjI3Yy0wMWI0LTQ5NjEtOGZhNy1kMTFkODk3MDY4N2UiLCJ1c2VybmFtZSI6IkFuYXBoeWdvbiJ9
+
 
 
 ### get token to frontend
@@ -268,8 +308,4 @@ redirect_uri=http://localhost:8080/login/oauth2/code/google
 GET https://www.googleapis.com/oauth2/v3/userinfo
 Authorization: Bearer {access_token}
 
-### Test the /user endpoint
-GET http://localhost:8080/api/auth/user
-Authorization: eyJzdWIiOiJjZTFhOTkxOC1iYWQ2LTRjMTktOTA4NC1jNDgyNzZkOTIzMWUiLCJ1c2VybmFtZSI6IkJhbmdEemlrcmkifQ==
-X-Api-Key: secret
 

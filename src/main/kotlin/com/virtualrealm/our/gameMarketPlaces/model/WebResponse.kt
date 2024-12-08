@@ -8,7 +8,8 @@ import com.virtualrealm.our.gameMarketPlaces.model.payment.InitiatePaymentRespon
 data class WebResponse<T>(
     val code: Int,
     val status: String,
-    val data: T?
+    val data: T?,
+    val message: String? = null
 )
 
 typealias LoginResponse = WebResponse<LoginResponseData>

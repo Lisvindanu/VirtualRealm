@@ -9,25 +9,30 @@ import com.virtualrealm.our.gameMarketPlaces.repository.UserRepository
 import com.virtualrealm.our.gameMarketPlaces.service.AuthServices
 import com.virtualrealm.our.gameMarketPlaces.validation.ValidationUtil
 import io.github.cdimascio.dotenv.Dotenv
+import io.jsonwebtoken.Jwts
+import io.jsonwebtoken.SignatureAlgorithm
+import okhttp3.FormBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.mindrot.jbcrypt.BCrypt
 import org.slf4j.LoggerFactory
-import org.springframework.stereotype.Service
-import java.time.LocalDateTime
-import okhttp3.FormBody
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User
 import org.springframework.security.oauth2.core.user.OAuth2User
+import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 import java.util.*
 
 
 @Service
-class AuthServicesImpl(
+class AuthServicesImpl  (
     val userRepository: UserRepository,
     val validationUtil: ValidationUtil,
-    private val tokenRepository: TokenRepository
+    private val tokenRepository: TokenRepository,
+    private val otpService: OtpService,
+    private val emailService: EmailService,
+
 ) : AuthServices {
 
     private val logger = LoggerFactory.getLogger(AuthServicesImpl::class.java)
@@ -36,10 +41,16 @@ class AuthServicesImpl(
 
     private val googleClientId = dotenv["GOOGLE_CLIENT_ID"] ?: throw IllegalStateException("GOOGLE_CLIENT_ID not found in .env")
     private val googleClientSecret = dotenv["GOOGLE_CLIENT_SECRET"] ?: throw IllegalStateException("GOOGLE_CLIENT_SECRET not found in .env")
-    private val redirectUri = dotenv["REDIRECT_URI"] ?: throw IllegalStateException("REDIRECT_URI not found in .env")
+    private val redirectUri = dotenv["GOOGLE_REDIRECT_URI"] ?: throw IllegalStateException("REDIRECT_URI not found in .env")
+
+
+    val SECRET_KEY: String = "test"
+
+
 
     @Transactional
     override fun register(registerRequest: RegisterRequest): RegisterResponseData {
+
         logger.info("Registering new user: ${registerRequest.username}")
         validationUtil.validate(registerRequest)
 
@@ -75,9 +86,6 @@ class AuthServicesImpl(
         return convertUserToResponseData(savedUser)
     }
 
-
-
-
     @Transactional
     override fun registerOrLoginWithGoogle(userData: UserDataResponse): RegisterResponseData {
         logger.info("Attempting to register or log in user via Google with email: ${userData.email}")
@@ -100,11 +108,12 @@ class AuthServicesImpl(
         return convertUserToResponseData(user)
     }
 
-
+    @Transactional
     override fun login(loginRequest: LoginRequest): LoginResponseData {
         validationUtil.validate(loginRequest)
 
-        return if (loginRequest.isGoogle) {
+        // Google login flow
+        if (loginRequest.isGoogle) {
             val googleToken = loginRequest.googleToken ?: throw IllegalArgumentException("Google token cannot be null")
             val userData = getUserDataFromGoogleToken(googleToken)
             logger.info("Google login successful for user: ${userData.username}")
@@ -113,20 +122,56 @@ class AuthServicesImpl(
             val token = generateAndStoreToken(user)
 
             logger.debug("Token generated: ${token.token}")
+            return LoginResponseData(token = token.token, expiresAt = token.expiresAt, status = "success")
+        }
 
-            LoginResponseData(token = token.token, expiresAt = token.expiresAt)
-        } else {
-            val user = userRepository.findByUsername(loginRequest.username)
-                ?: throw IllegalArgumentException("Invalid Credentials")
-            val password = loginRequest.password ?: throw IllegalArgumentException("Password cannot be null")
-            if (!checkPassword(password, user.password)) {
-                logger.warn("Invalid password for user: ${loginRequest.username}")
-                throw IllegalArgumentException("Invalid Credentials")
-            }
+        // Proses login biasa dengan username dan password
+        val user = userRepository.findByUsername(loginRequest.email)
+            ?: throw IllegalArgumentException("Invalid Credentials")
+        val password = loginRequest.password ?: throw IllegalArgumentException("Password cannot be null")
+
+        // Validasi password
+        if (!checkPassword(password, user.password)) {
+            logger.warn("Invalid password for user: ${loginRequest.email}")
+            return LoginResponseData(
+                message = "Invalid Credentials",
+                status = "ERROR"
+            )
+        }
+
+        // Jika isOtpVerified sudah true, langsung buatkan token
+        if (loginRequest.isOtpVerified) {
             val token = generateAndStoreToken(user)
-            LoginResponseData(token = token.token, expiresAt = token.expiresAt)
+            return LoginResponseData(
+                token = token.token,
+                expiresAt = token.expiresAt,
+                status = "SUCCESS"
+            )
+        }
+
+        // Jika OTP belum dikirimkan
+        var isOtpSent = false
+        val activeOtp = otpService.getActiveOtpForUser(user.id!!)
+        if (activeOtp == null) {
+            // Generate dan kirim OTP ke email
+            val otp = otpService.generateOtp(user.id!!)
+            emailService.sendOtp(user.email, otp)
+            isOtpSent = true // Tandai OTP sudah dikirim
+            logger.info("OTP sent to email: ${user.email}")
+            return LoginResponseData(
+                message = "OTP sent to your email",
+                status = "PENDING"
+            )
+        } else {
+            // Jika OTP sudah dikirimkan sebelumnya
+            logger.info("OTP already sent to email: ${user.email}")
+            return LoginResponseData(
+                message = "OTP has already been sent to your email",
+                status = "PENDING"
+            )
         }
     }
+
 
 
     //tess
@@ -184,11 +229,6 @@ class AuthServicesImpl(
         }
     }
 
-
-
-
-
-
     override fun getUserData(token: String): UserDataResponse {
         val userToken = tokenRepository.findByToken(token) ?: throw IllegalArgumentException("Invalid Token")
         val user = userToken.user ?: throw IllegalArgumentException("User not found")
@@ -198,11 +238,21 @@ class AuthServicesImpl(
     override fun logout(token: String) {
         val userToken = tokenRepository.findByToken(token)
         if (userToken != null) {
-            tokenRepository.delete(userToken) // Delete the token if it exists
+            val user = userToken.user // Ambil objek User yang terkait dengan token
+
+            // Ubah status isOtpVerified pada user
+            user.isOtpVerified = false
+
+            // Simpan perubahan pada user
+            userRepository.save(user)
+
+            // Hapus token dari repository
+            tokenRepository.delete(userToken)
         } else {
             throw IllegalArgumentException("Token not found")
         }
     }
+
 
     // Helper method to get user data from Google token
     override fun getUserDataFromGoogleToken(googleToken: String): UserDataResponse {
@@ -272,7 +322,38 @@ class AuthServicesImpl(
     }
 
 
+    @Transactional
+    override fun verifyOtpForLogin(otpVerificationRequest: OtpVerificationRequest): LoginResponseData {
+        val userId = otpVerificationRequest.userId
+        val otp = otpVerificationRequest.otp
+
+        // Validasi OTP menggunakan service
+        if (!otpService.validateOtp(userId, otp)) {
+            throw IllegalArgumentException("Invalid or expired OTP")
+        }
+
+        // OTP tervalidasi, ambil user
+        val user = userRepository.findById(userId).orElseThrow {
+            IllegalArgumentException("User not found")
+        }
+
+        // Tandai OTP sebagai verified
+        user.isOtpVerified = true
+        userRepository.save(user)
+
+        // Buat token baru untuk user
+        val token = generateAndStoreToken(user)
+
+        return LoginResponseData(
+            token = token.token,
+            expiresAt = token.expiresAt,
+            status = "success"
+        )
+    }
+
+
     private fun convertUserToResponseData(user: User): RegisterResponseData {
+        val userId = user.id?.toString() ?: throw IllegalArgumentException("User ID cannot be null")
         return RegisterResponseData(
             id = user.id.toString(),
             username = user.username,
@@ -293,15 +374,37 @@ class AuthServicesImpl(
         val sub = UUID.randomUUID().toString()
         val tokenPayLoad = mapOf("sub" to sub, "username" to user.username)
         val token = Base64.getEncoder().encodeToString(ObjectMapper().writeValueAsString(tokenPayLoad).toByteArray())
+        val expiresAt = LocalDateTime.now().plusHours(1)
 
         val userToken = UserToken(
             username = user.username,
             token = token,
-            expiresAt = LocalDateTime.now().plusHours(1),
+            expiresAt = expiresAt,
             user = user,
             sub = sub
         )
         tokenRepository.save(userToken)
         return userToken
     }
+
+    fun validateToken(token: String): Boolean {
+        try {
+            // Dekode token dari Base64
+            val decodedBytes = Base64.getUrlDecoder().decode(token)
+            val decodedString = String(decodedBytes)
+
+            // Parse payload dari token (misalnya menggunakan JSON parsing)
+            val payload = ObjectMapper().readValue(decodedString, Map::class.java)
+            val sub = payload["sub"]
+            val username = payload["username"]
+
+            // Periksa apakah sub dan username sesuai dengan data yang ada di database
+            val userToken = tokenRepository.findByToken(token)
+            return userToken != null && userToken.expiresAt.isAfter(LocalDateTime.now())
+        } catch (e: Exception) {
+            return false
+        }
+    }
+
+
 }

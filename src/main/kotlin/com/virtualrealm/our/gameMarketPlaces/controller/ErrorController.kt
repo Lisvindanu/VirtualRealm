@@ -8,37 +8,39 @@ import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
-
 @RestControllerAdvice
 @CrossOrigin
 class ErrorController {
+
     @ExceptionHandler(value = [ConstraintViolationException::class])
     fun validationHandler(constraintViolationException: ConstraintViolationException): WebResponse<String> {
         val messages = constraintViolationException.constraintViolations.joinToString(", ") { it.message ?: "Unknown error" }
         return WebResponse(
             code = 400,
             status = "Bad Request",
-            data = messages
+            data = messages,
+            message = messages
         )
     }
 
     @ExceptionHandler(value = [NotFoundException::class])
-    fun  notFound(notFoundException: NotFoundException): WebResponse<String> {
+    fun notFound(notFoundException: NotFoundException): WebResponse<String> {
         return WebResponse(
-            code = 404,
-            status = "Not Found",
-            data = "not found"
+            code = 400,
+            status = "Bad Request",
+            data = notFoundException.message
         )
     }
 
     @ExceptionHandler(value = [UnAuthorizedException::class])
-    fun  unauthorized(notFoundException: UnAuthorizedException): WebResponse<String> {
+    fun unauthorized(notFoundException: UnAuthorizedException): WebResponse<String> {
         return WebResponse(
             code = 401,
             status = "UNAUTHORIZED",
             data = "Please Put Your Api Keys"
         )
     }
+
     @ExceptionHandler(value = [Exception::class])
     fun handleGenericException(exception: Exception): WebResponse<String> {
         return WebResponse(
@@ -47,5 +49,4 @@ class ErrorController {
             data = exception.message ?: "An unexpected error occurred."
         )
     }
-
 }
