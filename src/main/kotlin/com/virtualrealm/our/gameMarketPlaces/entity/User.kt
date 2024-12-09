@@ -12,14 +12,14 @@ data class User (
     val id: Long? = null,
 
     @Column(name = "username", unique = true)
-    val username: String,
+    var username: String,
 
     @Column(name = "email")
     @field:NotBlank
     val email: String,
 
     @Column(name = "password")
-    val password: String,
+    var password: String,
 
     @Column(name = "googleId")
     val googleId: String? = null,
@@ -28,5 +28,8 @@ data class User (
     val createdAt: LocalDateTime = LocalDateTime.now(),
 
     @Column(name = "isOtpVerified")
-    var isOtpVerified: Boolean? = false
+    var isOtpVerified: Boolean? = false,
+
+    @Column(name = "role")
+    var role: String ?= "USER"
 )

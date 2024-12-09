@@ -30,4 +30,27 @@ class EmailService(private val mailSender: JavaMailSender) {
         message.setText("Your OTP code is: $otp. This code will expire in 5 minutes.")
         mailSender.send(message)
     }
+
+    fun sendPasswordResetLink(email: String, token: String) {
+        val smtpUsername = dotenv["SMTP_USERNAME"]
+        val smtpPassword = dotenv["SMTP_PASSWORD"]
+        val smtpHost = dotenv["SMTP_HOST"] ?: "smtp.gmail.com"
+        val smtpPort = dotenv["SMTP_PORT"]?.toInt() ?: 587
+        // Pastikan mailSender sudah dikonfigurasi dengan benar
+        val javaMailSender = mailSender as JavaMailSenderImpl
+        javaMailSender.host = smtpHost
+        javaMailSender.port = smtpPort
+        javaMailSender.username = smtpUsername
+        javaMailSender.password = smtpPassword
+
+        val resetLink = "https://your-app.com/reset-password?token=$token"
+
+        val message = SimpleMailMessage()
+        message.setTo(email)
+        message.setSubject("Password Reset Request")
+        message.setText("We received a request to reset your password. " +
+                "Click the link below to reset your password:\n$resetLink\n" +
+                "This link will expire in 1 hour.")
+        mailSender.send(message)
+    }
 }

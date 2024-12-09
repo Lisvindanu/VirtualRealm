@@ -76,7 +76,7 @@ class AuthServicesImpl  (
         val user = User(
             username = registerRequest.username,
             email = registerRequest.email,
-            password = hashedPassword ?: ""
+            password = hashedPassword ?: "",
         )
 
         logger.debug("Saving user: $user")
@@ -99,7 +99,8 @@ class AuthServicesImpl  (
                 username = userData.username,
                 email = userData.email,
                 password = "",
-                googleId = userData.googleId
+                googleId = userData.googleId,
+
             )
             logger.info("Creating new user: ${userData.username}")
             userRepository.save(newUser)
@@ -192,7 +193,8 @@ class AuthServicesImpl  (
                 email = email ?: "No Email",
                 password = "",
                 googleId = googleId,
-                createdAt = LocalDateTime.now()
+                createdAt = LocalDateTime.now(),
+
             )
             logger.info("Creating new user: $username with email: $email and googleId: $googleId")
             userRepository.save(newUser) // Save user to DB
@@ -405,6 +407,46 @@ class AuthServicesImpl  (
             return false
         }
     }
+
+
+    @Transactional
+    fun updateUserDetails(userId: Long, updateRequest: UpdateUserRequest): UserResponseData {
+        logger.info("Updating user details for user ID: $userId")
+
+        // Ambil user dari database
+        val existingUser = userRepository.findById(userId).orElseThrow {
+            IllegalArgumentException("User not found")
+        }
+
+        // Periksa apakah username baru sudah ada
+        if (updateRequest.username != existingUser.username) {
+            val existingUsername = userRepository.findByUsername(updateRequest.username)
+            if (existingUsername != null) {
+                throw IllegalArgumentException("Username already exists")
+            }
+            existingUser.username = updateRequest.username
+        }
+
+        // Jika password baru ada, hash passwordnya
+        if (updateRequest.password != null) {
+            existingUser.password = hashPassword(updateRequest.password)
+        }
+
+        // Simpan perubahan
+        val updatedUser = userRepository.save(existingUser)
+
+        logger.info("User details updated for user ID: ${updatedUser.id}")
+        return convertUserToResponseDataForUpdate(updatedUser)
+    }
+
+    fun convertUserToResponseDataForUpdate(user: User): UserResponseData {
+        return UserResponseData(
+            id = user.id!!,
+            username = user.username,
+            email = user.email
+        )
+    }
+
 
 
 }

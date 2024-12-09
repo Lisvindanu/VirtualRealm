@@ -25,7 +25,7 @@ Accept: application/json
 
 {
   "email": "Anaphygon@protonmail.com",
-  "password": "Test123",
+  "password": "Passwordku12",
   "isGoogle": false,
   "isOtpVerified" : false
 
@@ -39,7 +39,7 @@ Content-Type: application/json
 {
   "email": "Anaphygon@protonmail.com",
 
-  "otp": "172513"
+  "otp": "771228"
 }
 
 ### Login setelah verifotp true
@@ -50,7 +50,7 @@ Accept: application/json
 
 {
   "email": "Anaphygon@protonmail.com",
-  "password": "Test123",
+  "password": "LoLoLo",
   "isGoogle": false,
   "isOtpVerified" : true
 
@@ -72,6 +72,41 @@ X-Api-Key: secret
 Content-Type: application/json
 Accept: application/json
 Authorization: Bearer eyJzdWIiOiJlYWVkNjI3Yy0wMWI0LTQ5NjEtOGZhNy1kMTFkODk3MDY4N2UiLCJ1c2VybmFtZSI6IkFuYXBoeWdvbiJ9
+
+
+### Request Reset Password
+POST http://localhost:8080/api/auth/request-reset
+Content-Type: application/json
+X-Api-Key: secret
+
+{
+  "email": "Anaphygon@protonmail.com"
+}
+
+### Reset Password
+
+POST http://localhost:8080/api/auth/reset-password
+Content-Type: application/json
+X-Api-Key: secret
+
+{
+  "token": "474637",
+  "newPassword": "NewSecurePassword123"
+}
+
+### userDetailChange
+PUT http://localhost:8080/api/users/update/36
+X-Api-Key: secret
+Content-Type: application/json
+Accept: application/json
+
+{
+  "username": "ANAPIGONKU",
+  "password": "PasswordBaru"
+}
+
+
+
 
 
 
