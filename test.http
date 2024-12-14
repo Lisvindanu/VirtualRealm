@@ -4,13 +4,13 @@ X-Api-Key: secret
 
 
 ### Register Request (with OTP)
-POST http://localhost:8080/api/auth/register
+POST https://virtual-realm-b8a13cc57b6c.herokuapp.com/api/auth/register
 Content-Type: application/json
 X-Api-Key: secret
 
 {
-  "username": "example",
-  "email": "example@gmail.com",
+  "username": "Anaphygon",
+  "email": "Anaphygon@protonmail.com",
   "password": "TestPassword123",
   "password_confirmation": "TestPassword123",
   "isGoogle": false,
@@ -31,13 +31,13 @@ Content-Type: application/json
 
 
 ### Login
-POST http://localhost:8080/api/auth/login
+POST https://virtual-realm-b8a13cc57b6c.herokuapp.com/api/auth/login
 X-Api-Key: secret
 Content-Type: application/json
 Accept: application/json
 
 {
-  "email": "example@protonmail.com",
+  "email": "Anaphygon@protonmail.com",
   "password": "NewSecurePassword123",
   "isGoogle": false
 }
@@ -59,7 +59,7 @@ Authorization: Bearer eyJzdWIiOiI1NzE0MzZlYi0wNjU4LTRiMWMtYmMzOS1mNjQ4MWZlOTEzMT
 
 
 ### Request Reset Password
-POST http://localhost:8080/api/auth/request-reset
+POST https://virtual-realm-b8a13cc57b6c.herokuapp.com/api/auth/request-reset
 Content-Type: application/json
 X-Api-Key: secret
 
@@ -69,12 +69,12 @@ X-Api-Key: secret
 
 ### Reset Password
 
-POST http://localhost:8080/api/auth/reset-password
+POST https://virtual-realm-b8a13cc57b6c.herokuapp.com/api/auth/reset-password
 Content-Type: application/json
 X-Api-Key: secret
 
 {
-  "token": "434528",
+  "token": "681150",
   "newPassword": "NewSecurePassword123"
 }
 
@@ -105,14 +105,46 @@ POST http://localhost:8080/api/products
 X-Api-Key: secret
 Content-Type: application/json
 Accept: application/json
-token: eyJzdWIiOiI0YTU3NzcxOS03OTZlLTQ3ODUtOWYwYi1iYWFiN2I4ZmRjYzciLCJ1c2VybmFtZSI6InMifQ==
+token: eyJzdWIiOiJjYzZiNmU3ZS0zNTY5LTRmNzItYmMwMS1hYTE4MjdjYjdmZjYiLCJ1c2VybmFtZSI6IkFuYXBoeWdvbiJ9
 
 {
-  "id": 3,
-  "name": "naruto Lagi Sakit ",
+  "id": 5,
+  "name": "a OG",
   "price": 1200000,
-  "quantity": 10
+  "quantity": 10,
+  "categoryId": 3,
+  "genreId": 2
 }
+
+### Create product with image
+POST http://localhost:8080/api/products
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+Accept: application/json
+X-Api-Key: secret
+token: eyJzdWIiOiJjYzZiNmU3ZS0zNTY5LTRmNzItYmMwMS1hYTE4MjdjYjdmZjYiLCJ1c2VybmFtZSI6IkFuYXBoeWdvbiJ9
+
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="body"
+
+{
+  "id": 1,
+  "name": "Naruto Shippuden",
+  "price": 1200000,
+  "quantity": 10,
+  "categoryId": 3,
+  "genreId": 2
+}
+
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename= "resources/img/Ippo Pfp.jpeg"
+Content-Type: image/jpeg
+
+<@file>  <!-- The image file should be included here -->
+
+----WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+
+
 
 ###create product invalid
 
@@ -128,7 +160,7 @@ Accept: application/json
   "quantity": -10
 }
 ### get product
-GET localhost:8080/api/products/1
+GET http://localhost:8080/api/products/15
 X-Api-Key: secret
 Accept: application/json
 
@@ -176,7 +208,7 @@ Accept: application/json
 
 ### Delete product
 
-DELETE localhost:8080/api/products/1
+DELETE localhost:8080/api/products/10
 X-Api-Key: secret
 Accept: application/json
 
@@ -328,3 +360,79 @@ GET https://www.googleapis.com/oauth2/v3/userinfo
 Authorization: Bearer {access_token}
 
 
+### test kategori
+POST http://localhost:8080/api/categories
+Content-Type: application/json
+X-Api-Key: secret
+
+"Console"
+
+###
+GET http://localhost:8080/api/categories/3
+X-Api-Key: secret
+###
+GET http://localhost:8080/api/genres/2
+X-Api-Key: secret
+
+###
+PUT http://localhost:8080/api/categories/3
+Content-Type: application/json
+X-Api-Key: secret
+
+"Games"
+
+###
+DELETE http://localhost:8080/api/categories/2
+X-Api-Key: secret
+
+
+###
+POST http://localhost:8080/api/genres?name=Fighting&categoryId=3
+X-Api-Key: secret
+
+
+###
+PUT http://localhost:8080/api/genres/1?name=Adventure%20RPG&categoryId=1
+X-Api-Key: secret
+
+###
+DELETE http://localhost:8080/api/genres/1
+X-Api-Key: secret
+
+
+### Request to fetch products
+GET http://localhost:8080/api/products?page=0&size=10
+Accept: application/json
+X-Api-Key: secret
+
+
+
+
+
+### Update Product Request
+
+# This is a PUT request to update the product
+PUT http://localhost:8080/api/products/10 HTTP/1.1
+X-Api-Key: secret
+
+Content-Type: multipart/form-data; boundary=------------------------boundary
+
+--------------------------boundary
+Content-Disposition: form-data; name="body"
+Content-Type: application/json
+
+{
+    "name": "Updated Product Name",
+    "price": 99,
+    "quantity": 10,
+    "categoryId": 3,
+    "genreId": 2,
+    "imageUrl": "default-image.jpg"
+}
+
+--------------------------boundary
+Content-Disposition: form-data; name="file"; filename="image.jpg"
+Content-Type: image/jpeg
+
+[Insert image content here]
+--------------------------boundary--

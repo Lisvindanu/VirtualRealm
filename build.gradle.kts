@@ -20,6 +20,7 @@ repositories {
 }
 
 dependencies {
+	implementation("org.apache.tika:tika-core:2.8.0")
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-web")

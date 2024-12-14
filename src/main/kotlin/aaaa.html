@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Product</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Update Product</h1>
+
+<form id="updateForm">
+    <label for="updateName">Product Name:</label>
+    <input type="text" id="updateName" name="name" required>
+
+    <label for="updatePrice">Price:</label>
+    <input type="number" id="updatePrice" name="price" required>
+
+    <label for="updateQuantity">Quantity:</label>
+    <input type="number" id="updateQuantity" name="quantity" required>
+
+    <label for="updateCategoryId">Category ID:</label>
+    <select id="updateCategoryId" name="categoryId" required></select>
+
+    <label for="updateGenreId">Genre ID:</label>
+    <select id="updateGenreId" name="genreId" required></select>
+
+    <label for="updateFile">Image File:</label>
+    <input type="file" id="updateFile" name="file" accept="image/*">
+
+    <button type="submit">Update Product</button>
+</form>
+
+<script>
+    const queryParams = new URLSearchParams(window.location.search);
+    const productId = queryParams.get('id');
+
+    // Load product data for updating
+    fetch(`http://localhost:8080/api/products/${productId}`, {
+        method: 'GET',
+        headers: { 'X-Api-Key': 'secret' }
+    })
+        .then(response => response.json())
+        .then(data => {
+            const product = data.data;
+            document.getElementById('updateName').value = product.name;
+            document.getElementById('updatePrice').value = product.price;
+            document.getElementById('updateQuantity').value = product.quantity;
+            // Load categories and genres
+            loadCategories(product.categoryId);
+            loadGenres(product.genreId);
+        });
+
+    // Load categories
+    function loadCategories(selectedId) {
+        fetch('http://localhost:8080/api/categories', { method: 'GET', headers: { 'X-Api-Key': 'secret' } })
+            .then(response => response.json())
+            .then(categories => {
+                const categorySelect = document.getElementById('updateCategoryId');
+                categories.forEach(cat => {
+                    const option = document.createElement('option');
+                    option.value = cat.id;
+                    option.textContent = cat.name;
+                    if (cat.id === selectedId) option.selected = true;
+                    categorySelect.appendChild(option);
+                });
+            });
+    }
+
+    // Load genres
+    function loadGenres(selectedId) {
+        fetch('http://localhost:8080/api/genres', { method: 'GET', headers: { 'X-Api-Key': 'secret' } })
+            .then(response => response.json())
+            .then(genres => {
+                const genreSelect = document.getElementById('updateGenreId');
+                genres.forEach(genre => {
+                    const option = document.createElement('option');
+                    option.value = genre.id;
+                    option.textContent = genre.name;
+                    if (genre.id === selectedId) option.selected = true;
+                    genreSelect.appendChild(option);
+                });
+            });
+    }
+
+    document.getElementById('updateForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const formData = new FormData(this);
+
+        // Validate required fields
+        if (!formData.get('name') || !formData.get('price') || !formData.get('quantity')) {
+            alert('Please fill in all required fields.');
+            return;
+        }
+
+        // Create a new PUT request
+        fetch(`http://localhost:8080/api/products/${productId}`, {
+            method: 'PUT',
+            headers: {
+                'X-Api-Key': 'secret',  // Include API Key header
+                // Do not set 'Content-Type' because FormData will automatically set it
+            },
+            body: formData // Pass FormData directly as the body
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to update product');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.code === 200) {
+                    alert('Product updated successfully!');
+                } else {
+                    alert('Error: ' + data.status || 'Unknown error');
+                }
+            })
+            .catch(error => {
+                console.error('Error updating product:', error);
+                alert('An error occurred while updating the product.');
+            });
+    });
+
+</script>
+
+</body>
+</html>

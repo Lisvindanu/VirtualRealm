@@ -1,0 +1,74 @@
+### Create Product (with JSON body)
+POST http://localhost:8080/api/products
+Content-Type: multipart/form-data
+X-Api-Key: secret
+
+--boundary
+Content-Disposition: form-data; name="body"
+Content-Type: application/json
+
+{
+  "name": "New Product",
+  "price": 100,
+  "quantity": 10,
+  "categoryId": 1,
+  "genreId": 1,
+  "imageUrl": null
+}
+--boundary--
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="test-image.jpg"
+Content-Type: image/jpeg
+
+< D:\our-gameMarketPlaces\our-gameMarketPlaces\src\main\resources\img\Ippo.jpeg
+--boundary--
+
+### List Products
+GET http://localhost:8080/api/products?size=5&page=0
+X-Api-Key: secret
+
+###
+
+### Update Product
+PUT http://localhost:8080/api/products/1
+Content-Type: multipart/form-data
+X-Api-Key: YOUR_API_KEY
+
+--boundary
+Content-Disposition: form-data; name="body"
+Content-Type: application/json
+
+{
+  "name": "Updated Product",
+  "price": 200,
+  "quantity": 5,
+  "categoryId": 1,
+  "genreId": 2,
+  "imageUrl": null
+}
+--boundary--
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="updated-image.jpg"
+Content-Type: image/jpeg
+
+< ./path/to/updated-image.jpg
+--boundary--
+
+###
+
+### Delete Product
+DELETE http://localhost:8080/api/products/1
+X-Api-Key: YOUR_API_KEY
+
+###
+
+### List Products (Paginated)
+GET http://localhost:8080/api/products?size=0&page=1
+X-Api-Key: secret
+
+
+###
+GET http://localhost:8080/api/products/15
+X-Api-Key: secret
