@@ -1,5 +1,5 @@
 ### Send OTP request
-POST http://localhost:8080/api/auth/send-otp?email=anaphygon@protonmail.com
+POST http://localhost:8080/api/auth/send-otp?email=kamenriderdecade@gmail.com
 X-Api-Key: secret
 
 
@@ -26,19 +26,19 @@ Content-Type: application/json
 {
   "email": "example@gmail.com",
 
-  "otp": "587123"
+  "otp": "kode otp"
 }
 
 
 ### Login
-POST https://virtual-realm-b8a13cc57b6c.herokuapp.com/api/auth/login
+POST http://localhost:8080/api/auth/login
 X-Api-Key: secret
 Content-Type: application/json
 Accept: application/json
 
 {
-  "email": "Anaphygon@protonmail.com",
-  "password": "NewSecurePassword123",
+  "email": "kamenriderhibiki@gmail.com",
+  "password": "kamenriderhibiki",
   "isGoogle": false
 }
 
@@ -55,7 +55,7 @@ POST http://localhost:8080/api/auth/logout
 X-Api-Key: secret
 Content-Type: application/json
 Accept: application/json
-Authorization: Bearer eyJzdWIiOiI1NzE0MzZlYi0wNjU4LTRiMWMtYmMzOS1mNjQ4MWZlOTEzMTgiLCJ1c2VybmFtZSI6Ikxpc3ZpbmRhbnUifQ==
+Authorization: Bearer eyJzdWIiOiJmZmIyZTVhNC0yOTgwLTQ0ZGQtYjNhYS0wYWI2Y2Y1OGE5ZGIiLCJ1c2VybmFtZSI6ImthbWVucmlkZXJoaWJpa2kifQ==
 
 
 ### Request Reset Password
