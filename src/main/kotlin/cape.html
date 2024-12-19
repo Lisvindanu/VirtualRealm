@@ -71,7 +71,7 @@
 <script>
     // Load products and display them
     document.getElementById('load-products-btn').addEventListener('click', function() {
-        fetch('http://localhost:8080/api/products?page=0&size=10', {
+        fetch('https://virtual-realm-b8a13cc57b6c.herokuapp.com/api/products?page=0&size=10', {
             method: 'GET',
             headers: { 'Accept': 'application/json', 'X-Api-Key': 'secret' }
         })

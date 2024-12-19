@@ -22,41 +22,77 @@ class ProductController(val productService: ProductService,
                         val objectMapper: ObjectMapper,
                         @Value("\${file.upload.dir}") val uploadDir: String) {
 
+//    @PostMapping(
+//        value = ["/api/products"],
+//        produces = ["application/json"],
+//        consumes = ["multipart/form-data", "application/json"]
+//    )
+//    fun createProduct(
+//        @RequestPart(value = "body", required = false) body: String?,  // Handle JSON body as a part
+//        @RequestPart(value = "file", required = false) file: MultipartFile?,  // Handle file upload
+//        @RequestHeader("X-Api-Key") apiKey: String  // API Key validation
+//    ): WebResponse<ProductResponse> {
+//        // If the body part is provided, convert it to CreateProductRequest
+//        val createProductRequest = body?.let {
+//            objectMapper.readValue(it, CreateProductRequest::class.java)
+//        } ?: throw IllegalArgumentException("Missing request body (either JSON or multipart)")
+//
+//        // Validate the request
+//        validateRequest(createProductRequest)
+//
+//        // Validate the file if present
+//        file?.let {
+//            val tika = Tika()
+//            val detectedType = tika.detect(it.inputStream)
+//            if (detectedType !in listOf("image/jpeg", "image/png")) {
+//                throw IllegalArgumentException("Unsupported file type: $detectedType")
+//            }
+//        }
+//
+//        // Process product creation
+//        val productResponse = productService.create(createProductRequest, file)
+//
+//        return WebResponse(
+//            code = 200,
+//            status = "success",
+//            data = productResponse
+//        )
+//    }
+
     @PostMapping(
         value = ["/api/products"],
         produces = ["application/json"],
-        consumes = ["multipart/form-data", "application/json"]
+        consumes = ["multipart/form-data"]
     )
     fun createProduct(
-        @RequestPart(value = "body", required = false) body: String?,  // Handle JSON body as a part
-        @RequestPart(value = "file", required = false) file: MultipartFile?,  // Handle file upload
-        @RequestHeader("X-Api-Key") apiKey: String  // API Key validation
+        @RequestPart("body") body: String,
+        @RequestPart(value = "file", required = false) file: MultipartFile?,
+        @RequestHeader("X-Api-Key") apiKey: String
     ): WebResponse<ProductResponse> {
-        // If the body part is provided, convert it to CreateProductRequest
-        val createProductRequest = body?.let {
-            objectMapper.readValue(it, CreateProductRequest::class.java)
-        } ?: throw IllegalArgumentException("Missing request body (either JSON or multipart)")
+        try {
+            val createProductRequest = objectMapper.readValue(body, CreateProductRequest::class.java)
 
-        // Validate the request
-        validateRequest(createProductRequest)
+            // Validate request first
+            validateRequest(createProductRequest)
 
-        // Validate the file if present
-        file?.let {
-            val tika = Tika()
-            val detectedType = tika.detect(it.inputStream)
-            if (detectedType !in listOf("image/jpeg", "image/png")) {
-                throw IllegalArgumentException("Unsupported file type: $detectedType")
+            // Then validate file if present
+            file?.let {
+                val allowedTypes = listOf("image/png", "image/jpeg", "image/jpg", "image/svg+xml")
+                if (!allowedTypes.contains(it.contentType)) {
+                    throw IllegalArgumentException("Only image files (png, jpg, jpeg, svg) are allowed")
+                }
             }
+
+            val productResponse = productService.create(createProductRequest, file)
+
+            return WebResponse(
+                code = 200,
+                status = "success",
+                data = productResponse
+            )
+        } catch (e: Exception) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message ?: "Invalid request")
         }
-
-        // Process product creation
-        val productResponse = productService.create(createProductRequest, file)
-
-        return WebResponse(
-            code = 200,
-            status = "success",
-            data = productResponse
-        )
     }
 
     private fun validateRequest(request: CreateProductRequest) {

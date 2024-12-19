@@ -76,7 +76,7 @@
     const productId = queryParams.get('id');
 
     // Load product data for updating
-    fetch(`http://localhost:8080/api/products/${productId}`, {
+    fetch(`https://virtual-realm-b8a13cc57b6c.herokuapp.com/api/products/${productId}`, {
         method: 'GET',
         headers: { 'X-Api-Key': 'secret' }
     })
@@ -93,7 +93,7 @@
 
     // Load categories
     function loadCategories(selectedId) {
-        fetch('http://localhost:8080/api/categories', { method: 'GET', headers: { 'X-Api-Key': 'secret' } })
+        fetch('https://virtual-realm-b8a13cc57b6c.herokuapp.com/api/categories', { method: 'GET', headers: { 'X-Api-Key': 'secret' } })
             .then(response => response.json())
             .then(categories => {
                 const categorySelect = document.getElementById('updateCategoryId');
@@ -109,7 +109,7 @@
 
     // Load genres
     function loadGenres(selectedId) {
-        fetch('http://localhost:8080/api/genres', { method: 'GET', headers: { 'X-Api-Key': 'secret' } })
+        fetch('https://virtual-realm-b8a13cc57b6c.herokuapp.com/api/genres', { method: 'GET', headers: { 'X-Api-Key': 'secret' } })
             .then(response => response.json())
             .then(genres => {
                 const genreSelect = document.getElementById('updateGenreId');
@@ -135,7 +135,7 @@
         }
 
         // Create a new PUT request
-        fetch(`http://localhost:8080/api/products/${productId}`, {
+        fetch(`https://virtual-realm-b8a13cc57b6c.herokuapp.com/api/products/${productId}`, {
             method: 'PUT',
             headers: {
                 'X-Api-Key': 'secret',  // Include API Key header

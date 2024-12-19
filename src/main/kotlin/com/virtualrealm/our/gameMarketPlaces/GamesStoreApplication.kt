@@ -15,7 +15,7 @@ fun main(args: Array<String>) {
 	val requiredKeys = listOf(
 		"DATABASE_URL", "DATABASE_USERNAME", "DATABASE_PASSWORD",
 		"SMTP_HOST", "SMTP_PORT", "SMTP_USERNAME", "SMTP_PASSWORD",
-		"GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "GOOGLE_REDIRECT_URI"
+		"GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "GOOGLE_REDIRECT_URI", "FTP_SERVER", "FTP_PORT", "FTP_USERNAME", "FTP_PASSWORD",
 	)
 	val missingKeys = requiredKeys.filter { dotenv[it].isNullOrBlank() }
 

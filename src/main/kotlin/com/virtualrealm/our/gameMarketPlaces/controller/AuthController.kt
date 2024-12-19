@@ -181,13 +181,13 @@ class AuthController(
         // Tandai OTP sebagai terverifikasi
         userService.markOtpAsVerified(user.id!!, request.otp)
 
-        // Finalisasi registrasi dan buat token
-        val token = authServices.generateAndStoreToken(user)
+//        // Finalisasi registrasi dan buat token
+//        val token = authServices.generateAndStoreToken(user)
 
         return ResponseEntity.ok(WebResponse(
             code = 200,
             status = OtpStatus.OTP_VERIFIED.status,
-            data = "User registered successfully. Token: ${token.token}",
+            data = "User registered successfully. ",
             message = OtpStatus.OTP_VERIFIED.message
         ))
     }

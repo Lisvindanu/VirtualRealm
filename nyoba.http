@@ -65,10 +65,98 @@ X-Api-Key: YOUR_API_KEY
 ###
 
 ### List Products (Paginated)
-GET http://localhost:8080/api/products?size=0&page=1
+GET http://localhost:8080/api/products?size=10&page=1
 X-Api-Key: secret
 
 
 ###
 GET http://localhost:8080/api/products/15
 X-Api-Key: secret
+
+
+### Test Create Product with File Upload
+POST http://localhost:8080/api/products
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+X-Api-Key: secret
+
+--WebAppBoundary
+Content-Disposition: form-data; name="body"
+Content-Type: application/json
+
+{
+  "name": "Test Product",
+  "price": 100000,
+  "quantity": 10,
+  "categoryId": 2,
+  "genreId": 1
+}
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="test-image.jpg"
+Content-Type: image/jpeg
+
+< ./test-image.jpg
+
+--WebAppBoundary--
+
+### Test Create Product without File
+POST http://localhost:8080/api/products
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+X-Api-Key: secret
+
+--WebAppBoundary
+Content-Disposition: form-data; name="body"
+Content-Type: application/json
+
+{
+  "name": "Test Product No Image",
+  "price": 150000,
+  "quantity": 5,
+  "categoryId": 2,
+  "genreId": 1
+}
+
+--WebAppBoundary--
+
+### Test Create Product with Invalid File Type
+POST http://localhost:8080/api/products
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+X-Api-Key: your-api-key-here
+
+--WebAppBoundary
+Content-Disposition: form-data; name="body"
+Content-Type: application/json
+
+{
+  "name": "Test Invalid File",
+  "price": 200000,
+  "quantity": 15,
+  "categoryId": 1,
+  "genreId": 1
+}
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="test.txt"
+Content-Type: text/plain
+
+< ./test.txt
+
+--WebAppBoundary--
+
+### Test Create Product with Invalid Data (Missing Name)
+POST http://localhost:8080/api/products
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+X-Api-Key: your-api-key-here
+
+--WebAppBoundary
+Content-Disposition: form-data; name="body"
+Content-Type: application/json
+
+{
+  "price": 100000,
+  "quantity": 10,
+  "categoryId": 1,
+  "genreId": 1
+}
+
+--WebAppBoundary--
